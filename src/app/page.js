@@ -64,7 +64,7 @@ export default function Home() {
       className="u-flex u-flex-vertical u-padding-20 u-cross-center u-gap-32 checker-background"
       style={{ marginBottom: `${detailHeight}px` }}
     >
-      <div className="u-flex u-main-center u-margin-block-start-64">
+      <div className="connection-visual">
         <div className="outer-card">
           <div className="inner-card">
             <svg
@@ -86,16 +86,17 @@ export default function Home() {
           </div>
         </div>
         <div
-          className="u-flex u-cross-center"
+          className="connection-line"
           style={{
             opacity: status === "success" ? 1 : 0,
             transition: "opacity 2.5s",
           }}
         >
           <div className="line-left"></div>
-          <div className="u-flex u-main-center u-border-radius-circle tick-container">
-            <span className="icon-check" style={{ color: "#fd366e" }}></span>
-          </div>
+          <div
+            className="u-flex u-main-center u-border-radius-circle tick-container icon-check"
+            style={{ color: "#fd366e" }}
+          ></div>
           <div className="line-right"></div>
         </div>
         <div className="outer-card">
@@ -135,7 +136,7 @@ export default function Home() {
           <h1 className="heading-level-5">Check connection</h1>
         )}
 
-        <p className="body-text-2">
+        <p className="body-text-2 u-text-center">
           {status === "success" ? (
             <span>You connected your app successfully.</span>
           ) : status === "error" || status === "idle" ? (
