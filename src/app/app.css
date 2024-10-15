@@ -16,63 +16,67 @@ button {
 }
 
 .connection-visual {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  max-width: 40em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .outer-card {
-  display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
-  grid-template-rows: 1fr 10fr 1fr;
   aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   background: hsl(var(--color-neutral-5));
   border-radius: 25%;
-  box-shadow: var(--shadow-small);
-  border: solid 0.0625rem rgb(238, 238, 241);
   box-shadow: 0px 9.36px 9.36px 0px hsla(0, 0%, 0%, 0.04);
+  border: solid 1px rgb(238, 238, 241);
+  position: relative;
 }
 
 .inner-card {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr 2fr 1fr;
-  aspect-ratio: 1/1;
-  grid-area: 2 / 2 / 3 / 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 87.5%;
+  height: 87.5%;
   background: hsl(var(--color-neutral-0));
   border-radius: 20%;
-  box-shadow: var(--shadow-small);
   box-shadow: 0px 2px 12px 0px hsla(0, 0%, 0%, 0.03);
+  position: relative;
 }
 
 .inner-card > svg {
-  width: 100%;
-  height: 100%;
-  grid-area: 2 / 2 / 3 / 3;
+  width: 60%;
+  height: 60%;
 }
 
 .connection-line {
-  display: grid;
-  grid-template-columns: 3fr 1fr 3fr;
+  display: flex;
   align-items: center;
-}
-
-.line-left {
   width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    340.76deg,
-    #f02e65 6.32%,
-    rgba(254, 149, 103, 0.15) 116.81%
-  );
 }
 
 .line-right {
-  width: 100%;
+  flex: 1;
   height: 1px;
   background: linear-gradient(
     171.76deg,
     #f02e65 6.32%,
     rgba(254, 149, 103, 0.15) 116.81%
+  );
+}
+
+.line-left {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    #f02e65 0%,
+    rgba(254, 149, 103, 0.15) 100%
   );
 }
 
@@ -89,12 +93,15 @@ button {
 }
 
 .tick-container {
-  aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
   align-items: center;
+  aspect-ratio: 1/1;
+  flex: 0 1 20%;
+  font-size: 1.5em;
   border: 1.8px solid hsla(343, 98%, 60%, 0.32);
   background-color: hsla(343, 98%, 60%, 0.08);
+  color: #fd366e;
 }
 
 .checker-background {
