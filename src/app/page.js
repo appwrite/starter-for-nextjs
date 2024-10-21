@@ -5,7 +5,7 @@ import "@appwrite.io/pink";
 import "@appwrite.io/pink-icons";
 import { useState, useEffect, useRef } from "react";
 import { client } from "../lib/appwrite";
-import { AppwriteException } from "node-appwrite";
+import { AppwriteException } from "appwrite";
 
 export default function Home() {
   const [detailHeight, setDetailHeight] = useState(0);
@@ -15,17 +15,17 @@ export default function Home() {
 
   const detailsRef = useRef(null);
 
-  useEffect(() => {
-    const updateHeight = () => {
-      if (detailsRef.current) {
-        setDetailHeight(detailsRef.current.clientHeight);
-      }
-    };
+  const updateHeight = useCallback(() => {
+    if (detailsRef.current) {
+      setDetailHeight(detailsRef.current.clientHeight);
+    }
+  }, [logs, showLogs]);
 
+  useEffect(() => {
     updateHeight();
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
-  }, []);
+  }, [updateHeight]);
 
   async function sendPing() {
     if (status === "loading") return;
@@ -54,9 +54,8 @@ export default function Home() {
       };
       setLogs((prevLogs) => [log, ...prevLogs]);
       setStatus("error");
-    } finally {
-      setShowLogs(true);
     }
+    setShowLogs(true);
   }
 
   return (
@@ -330,7 +329,7 @@ export default function Home() {
                         </th>
                       </>
                     ) : (
-                      <th className="table-thead-col">
+                      <th className="table-thead-col" colSpan="5">
                         <span className="u-color-text-offline">Logs</span>
                       </th>
                     )}

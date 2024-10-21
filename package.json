@@ -13,7 +13,6 @@
     "@appwrite.io/pink-icons": "^1.0.0",
     "appwrite": "^16.0.1",
     "next": "14.2.15",
-    "node-appwrite": "^14.1.0",
     "react": "^18",
     "react-dom": "^18"
   }
