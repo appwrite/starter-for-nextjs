@@ -3,7 +3,7 @@
 import "./app.css";
 import "@appwrite.io/pink";
 import "@appwrite.io/pink-icons";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { client } from "../lib/appwrite";
 import { AppwriteException } from "appwrite";
 
@@ -183,7 +183,7 @@ export default function Home() {
               className="u-flex-vertical u-gap-8"
             >
               <div className="u-flex u-main-space-between u-cross-center">
-                <h2 className="heading-level-7">Go to console</h2>
+                <h2 className="heading-level-7">Head to Appwrite Cloud</h2>
                 <span
                   className="icon-arrow-right"
                   style={{ color: "hsl(var(--color-neutral-15))" }}
