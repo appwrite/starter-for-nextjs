@@ -286,12 +286,6 @@ export default function Home() {
                       {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_NAME}
                     </p>
                   </div>
-                  <div className="u-grid u-grid-vertical u-gap-8">
-                    <p className="u-color-text-offline">Version</p>
-                    <p className="body-text-2">
-                      {process.env.NEXT_PUBLIC_APPWRITE_VERSION}
-                    </p>
-                  </div>
                 </div>
               </div>
 
