@@ -89,9 +89,9 @@ export default function Home() {
         <div
           className={`flex w-36 items-center transition-opacity duration-2500 ${status === "success" ? "opacity-100" : "opacity-0"}`}
         >
-          <div className="to-[rgba(254, 149, 103, 0.15)] h-[1px] flex-1 bg-gradient-to-l from-[#f02e65] via-[#fe9533]"></div>
+          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-l from-[#f02e65]"></div>
           <div className="icon-check flex h-5 w-5 items-center justify-center rounded-full border border-[#FD366E52] bg-[#FD366E14] text-[#FD366E]"></div>
-          <div className="to-[rgba(254, 149, 103, 0.15)] h-[1px] flex-1 bg-gradient-to-b from-[#f02e65]"></div>
+          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-r from-[#f02e65]"></div>
         </div>
         <div className="rounded-[25%] border border-[#19191C0A] bg-[#F9F9FA] p-3 shadow-[0px_9.36px_9.36px_0px_hsla(0,0%,0%,0.04)]">
           <div className="rounded-[25%] border border-[#FAFAFB] bg-white p-5 shadow-[0px_2px_12px_0px_hsla(0,0%,0%,0.03)] lg:p-9">
