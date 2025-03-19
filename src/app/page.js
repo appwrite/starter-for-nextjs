@@ -161,7 +161,7 @@ export default function Home() {
           <p>
             Edit{" "}
             <code className="rounded-sm bg-[#EDEDF0] p-1">app/page.js</code> to
-            get started with building your app
+            get started with building your app.
           </p>
         </div>
         <a
@@ -176,7 +176,10 @@ export default function Home() {
               </h2>
               <span className="icon-arrow-right text-[#D8D8DB]"></span>
             </div>
-            <p>Start managing your project from the Appwrite console</p>
+            <p>
+              Navigate to the console to control and oversee the Appwrite
+              services.
+            </p>
           </div>
         </a>
 
@@ -194,7 +197,7 @@ export default function Home() {
             </div>
             <p>
               Discover the full power of Appwrite by diving into our
-              documentation
+              documentation.
             </p>
           </div>
         </a>
