@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+summary::-webkit-details-marker {
+  display: none
+}
+
 .checker-background::before {
   content: "";
   position: absolute;
