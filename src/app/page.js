@@ -3,14 +3,14 @@
 import "./app.css";
 import "@appwrite.io/pink-icons";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { client } from "../lib/appwrite";
+import { client } from "@/lib/appwrite";
 import { AppwriteException } from "appwrite";
 import NextjsLogo from "../static/nextjs-icon.svg";
 import AppwriteLogo from "../static/appwrite-icon.svg";
 import Image from "next/image";
 
 export default function Home() {
-  const [detailHeight, setDetailHeight] = useState(0);
+  const [detailHeight, setDetailHeight] = useState(55);
   const [logs, setLogs] = useState([]);
   const [status, setStatus] = useState("idle");
   const [showLogs, setShowLogs] = useState(false);
@@ -75,19 +75,19 @@ export default function Home() {
       className="checker-background flex flex-col items-center p-5"
       style={{ marginBottom: `${detailHeight}px` }}
     >
-      <div className="mt-25 flex w-full max-w-[40em] items-center justify-center lg:mt-52">
+      <div className="mt-25 flex w-full max-w-[40em] items-center justify-center lg:mt-34">
         <div className="rounded-[25%] border border-[#19191C0A] bg-[#F9F9FA] p-3 shadow-[0px_9.36px_9.36px_0px_hsla(0,0%,0%,0.04)]">
           <div className="rounded-[25%] border border-[#FAFAFB] bg-white p-5 shadow-[0px_2px_12px_0px_hsla(0,0%,0%,0.03)] lg:p-9">
             <Image
               alt={"Next.js logo"}
               src={NextjsLogo}
-              width={72}
-              height={72}
+              width={56}
+              height={56}
             />
           </div>
         </div>
         <div
-          className={`flex w-36 items-center transition-opacity duration-2500 ${status === "success" ? "opacity-100" : "opacity-0"}`}
+          className={`flex w-38 items-center transition-opacity duration-2500 ${status === "success" ? "opacity-100" : "opacity-0"}`}
         >
           <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-l from-[#f02e65]"></div>
           <div className="icon-check flex h-5 w-5 items-center justify-center rounded-full border border-[#FD366E52] bg-[#FD366E14] text-[#FD366E]"></div>
@@ -98,8 +98,8 @@ export default function Home() {
             <Image
               alt={"Appwrite logo"}
               src={AppwriteLogo}
-              width={72}
-              height={72}
+              width={56}
+              height={56}
             />
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function Home() {
 
       <div className="grid grid-rows-3 gap-7 lg:grid-cols-3 lg:grid-rows-none">
         <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
-          <h2 className="text-2xl font-light text-[#2D2D31]">Edit your app</h2>
+          <h2 className="text-xl font-light text-[#2D2D31]">Edit your app</h2>
           <p>
             Edit{" "}
             <code className="rounded-sm bg-[#EDEDF0] p-1">app/page.js</code> to
@@ -171,7 +171,7 @@ export default function Home() {
         >
           <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
             <div className="flex flex-row items-center justify-between">
-              <h2 className="text-2xl font-light text-[#2D2D31]">
+              <h2 className="text-xl font-light text-[#2D2D31]">
                 Go to console
               </h2>
               <span className="icon-arrow-right text-[#D8D8DB]"></span>
@@ -190,7 +190,7 @@ export default function Home() {
         >
           <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
             <div className="flex flex-row items-center justify-between">
-              <h2 className="text-2xl font-light text-[#2D2D31]">
+              <h2 className="text-xl font-light text-[#2D2D31]">
                 Explore docs
               </h2>
               <span className="icon-arrow-right text-[#D8D8DB]"></span>

@@ -13,7 +13,8 @@ summary::-webkit-details-marker {
   left: 0;
   background-image: linear-gradient(#e6e6e690 1px, transparent 1px),
     linear-gradient(90deg, #e6e6e690 1px, transparent 1px);
-  background-size: 4em 4em;
+  background-size: 3.7em 3.7em;
   mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 55%);
   z-index: -1;
+  background-position-x: center;
 }
