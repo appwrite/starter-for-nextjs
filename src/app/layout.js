@@ -1,5 +1,3 @@
-import AppwriteIcon from "../static/appwrite-icon.svg";
-
 export const metadata = {
   title: "Appwrite + Next.js",
   description: "Appwrite starter for Next.js",
@@ -9,7 +7,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href={AppwriteIcon} />
+        <link rel="icon" href="/appwrite.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
