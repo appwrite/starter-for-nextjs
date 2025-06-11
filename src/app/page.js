@@ -148,7 +148,6 @@ export default function Home() {
       );
       // Set success message
       setFailedMessage('Todo marked failed!');
-
       setTimeout(() => setFailedMessage(''), 5000);
       fetchTodos(); // Refresh the todo list
     } catch (error) {
