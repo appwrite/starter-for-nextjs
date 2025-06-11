@@ -15,8 +15,12 @@ export default function Home() {
   const [completeMessage, setCompleteMessage] = useState('');
   const [failedMessage, setFailedMessage] = useState('');
   const [deleteMessage, setDeleteMessage] = useState('');
+  const [editMessage, setEditMessage] = useState('');
+  const [isEditing, setIsEditing] = useState('');
+  const [editTodo, setEditTodo] = useState(null);
   const [tab, setTab] = useState('hi');
   const [todos, setTodos] = useState([]);
+
 
   const fileInputRef = useRef(null);
 
@@ -153,6 +157,37 @@ export default function Home() {
     }
   };
 
+  const handleEdit = (todo) => {
+    setIsEditing(true);
+    setEditTodo(todo);
+    setTitle(todo.title);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!editTodo) return;
+
+    try {
+      await databases.updateDocument(
+        "6847b5980033f7e274d8", // Database ID
+        "6847b5a9003c48843844", // Collection ID
+        editTodo.$id,
+        {
+          title,
+        }
+      );
+      // Set success message
+      setEditMessage('Todo Updated');
+      setTimeout(() => setEditMessage(''), 5000);
+      setTitle('');
+      setEditTodo(null);
+      setIsEditing(false);
+      fetchTodos();
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+    }
+  };
+
   return (
     <main
       className="sm:flex sm:flex-col items-center p-5 space-y-4"
@@ -253,10 +288,14 @@ export default function Home() {
               <p className="text-red-600 mt-2 py-2 text-center">{deleteMessage}</p>
             )}
 
+            {editMessage && (
+              <p className="text-blue-600 mt-2 py-2 text-center">{editMessage}</p>
+            )}
+
             {pendingTodos.length === 0 && completeTodos.length === 0 && failedTodos.length === 0 ? (
               <p className="text-center text-gray-500 py-8">No todos Added</p>
             ) : (
-             null
+              null
             )}
 
             <div className="space-y-2">
@@ -306,7 +345,6 @@ export default function Home() {
                         />
                       ) : (
                         <div className="w-16 h-16 rounded-lg bg-purple-200 border-2 border-dashed border-purple-300 flex items-center justify-center text-xs text-gray-500">
-
                         </div>
                       )}
 
@@ -361,15 +399,37 @@ export default function Home() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 ml-auto">
-                        <button
-                          onClick={() => onEdit?.(todo.id)}
-                          className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
-                          </svg>
+                        {isEditing && editTodo?.$id === todo.$id ? (
+                          <form
+                            onSubmit={handleUpdate}
+                            className="flex space-y-2 gap-2"
+                          >
+                            <input
+                              type="text"
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
+                              className="mt-2 block w-full border rounded-sm border-gray-100 p-2 "
+                              placeholder="What needs to be done?"
+                              autoFocus
+                            />
 
-                        </button>
+                            <button
+                              type="submit"
+                              className="border border-green-600 text-green-600 hover:bg-green-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium mt-2"
+                            >
+                              Save
+                            </button>
+                          </form>
+                        ) : (
+                          <button
+                            onClick={() => handleEdit(todo)}
+                            className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleDelete(todo.$id)}
                           className="border  border-red-400 text-red-600 hover:bg-gray-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
@@ -486,15 +546,37 @@ export default function Home() {
                       )}
 
                       <div className="flex items-center gap-2 ml-auto">
-                        <button
-                          onClick={() => onEdit?.(todo.id)}
-                          className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
-                          </svg>
+                        {isEditing && editTodo?.$id === todo.$id ? (
+                          <form
+                            onSubmit={handleUpdate}
+                            className="flex space-y-2 gap-2"
+                          >
+                            <input
+                              type="text"
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
+                              className="mt-2 block w-full border rounded-sm border-gray-100 p-2 "
+                              placeholder="What needs to be done?"
+                              autoFocus
+                            />
 
-                        </button>
+                            <button
+                              type="submit"
+                              className="border border-green-600 text-green-600 hover:bg-green-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium mt-2"
+                            >
+                              Save
+                            </button>
+                          </form>
+                        ) : (
+                          <button
+                            onClick={() => handleEdit(todo)}
+                            className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleDelete(todo.$id)}
                           className="border  border-red-400 text-red-600 hover:bg-gray-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
@@ -611,15 +693,37 @@ export default function Home() {
                         </>
                       )}
                       <div className="flex items-center gap-2 ml-auto">
-                        <button
-                          onClick={() => onEdit?.(todo.id)}
-                          className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
-                          </svg>
-                          Edit
-                        </button>
+                        {isEditing && editTodo?.$id === todo.$id ? (
+                          <form
+                            onSubmit={handleUpdate}
+                            className="flex space-y-2 gap-2"
+                          >
+                            <input
+                              type="text"
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
+                              className="mt-2 block w-full border rounded-sm border-gray-100 p-2 "
+                              placeholder="What needs to be done?"
+                              autoFocus
+                            />
+
+                            <button
+                              type="submit"
+                              className="border border-green-600 text-green-600 hover:bg-green-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium mt-2"
+                            >
+                              Save
+                            </button>
+                          </form>
+                        ) : (
+                          <button
+                            onClick={() => handleEdit(todo)}
+                            className="border border-blue-600 text-blue-600 hover:bg-blue-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleDelete(todo.$id)}
                           className="border border-red-400 text-red-600 hover:bg-gray-50 h-9 rounded-md px-3 flex items-center gap-2 text-sm font-medium"
