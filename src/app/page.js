@@ -139,7 +139,6 @@ export default function Home() {
       console.error("Missing document ID");
       return;
     }
-
     try {
       await databases.updateDocument(
         "6847b5980033f7e274d8", // Database ID
@@ -156,7 +155,6 @@ export default function Home() {
       console.error("Failed to mark todo as fail:", error);
     }
   };
-
 
   return (
     <main
