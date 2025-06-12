@@ -24,11 +24,7 @@ export default function Home() {
 
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-
+  // post
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,13 +42,14 @@ export default function Home() {
 
     try {
       const results = await storage.createFile(
-        '6847c4e1001bb5fa1427', // bucketId
+        (process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID), // bucketId
         ID.unique(), // fileId
         file, // file
       );
+
       const result = await databases.createDocument(
-        '6847b5980033f7e274d8', // databaseId
-        '6847b5a9003c48843844',
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
         ID.unique(), // documentId
         { //data
           title: title,
@@ -64,7 +61,7 @@ export default function Home() {
       // Set success message
       setSuccessMessage('Todo added successfully!');
 
-      // Optionally clear form fields
+      // clear form fields
       setTitle('');
       if (fileInputRef.current) fileInputRef.current.value = null;
 
@@ -77,11 +74,12 @@ export default function Home() {
     }
   };
 
+  // fetch
   const fetchTodos = async () => {
     try {
-      const response = await databases.listDocuments(
-        '6847b5980033f7e274d8', // databaseId
-        '6847b5a9003c48843844'  // collectionId
+      const response = await databases.listDocuments( //fetches multiple documents from a collection.
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
       );
       setTodos(response.documents);
     } catch (error) {
@@ -89,11 +87,12 @@ export default function Home() {
     }
   };
 
+  // delete
   const handleDelete = async (id) => {
     try {
       await databases.deleteDocument(
-        '6847b5980033f7e274d8',
-        '6847b5a9003c48843844',
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
         // ID.unique(), // documentId
         id
       );
@@ -112,6 +111,7 @@ export default function Home() {
   const pendingTodos = todos.filter((todo) => todo.status === 'pending');
 
 
+  // complete status
   const handleComplete = async (id) => {
     if (!id) {
       console.error("Missing document ID");
@@ -120,8 +120,8 @@ export default function Home() {
 
     try {
       await databases.updateDocument(
-        "6847b5980033f7e274d8", // Database ID
-        "6847b5a9003c48843844", // Collection ID
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
         id,                     // Document ID
         { status: "completed" } // Fields to update
       );
@@ -136,6 +136,7 @@ export default function Home() {
     }
   };
 
+  // failed status
   const handleFailed = async (id) => {
     if (!id) {
       console.error("Missing document ID");
@@ -143,8 +144,8 @@ export default function Home() {
     }
     try {
       await databases.updateDocument(
-        "6847b5980033f7e274d8", // Database ID
-        "6847b5a9003c48843844", // Collection ID
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
         id,                     // Document ID
         { status: "failed" } // Fields to update
       );
@@ -157,6 +158,7 @@ export default function Home() {
     }
   };
 
+  // edit
   const handleEdit = (todo) => {
     setIsEditing(true);
     setEditTodo(todo);
@@ -168,9 +170,9 @@ export default function Home() {
     if (!editTodo) return;
 
     try {
-      await databases.updateDocument(
-        "6847b5980033f7e274d8", // Database ID
-        "6847b5a9003c48843844", // Collection ID
+      await databases.updateDocument( // service that lets you update an existing document inside a collection
+        (process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID), // databaseId
+        (process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID),
         editTodo.$id,
         {
           title,
@@ -188,6 +190,11 @@ export default function Home() {
     }
   };
 
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
     <main
       className="sm:flex sm:flex-col items-center p-5 space-y-4"
@@ -196,7 +203,7 @@ export default function Home() {
         <h1 className="text-6xl py-4 font-semibold text-indigo-500"> Todo Masterpiece</h1>
         <h1 className="text-xl py-2">Organise your tasks with style and efficiency</h1>
       </div>
-
+      {/* top */}
       <div className="sm:flex items-center gap-4 py-2 space-y-2">
         <div className=" border border-purple-300 rounded-sm  py-2 px-4">
           <div className="text-xl font-bold text-purple-700  text-center">{pendingTodos.length}</div>
@@ -217,6 +224,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* tabs */}
       <div>
         <div className="flex space-x-4 sm:w-full rounded-sm border border-gray-100 py-4 px-2 ">
           <button
@@ -298,6 +306,7 @@ export default function Home() {
               null
             )}
 
+            {/* failed */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold mb-2 text-black-700">Pending ({pendingTodos.length})</h2>
               {pendingTodos.map((todo) => (
@@ -446,7 +455,7 @@ export default function Home() {
               ))}
             </div>
 
-
+            {/* completed */}
             <div className="space-y-2 py-2">
               <h2 className="text-lg font-bold mb-2 text-green-700">Completed ({completeTodos.length})</h2>
               {completeTodos.map((todo) => (
@@ -594,6 +603,7 @@ export default function Home() {
               ))}
             </div>
 
+            {/* failed */}
 
             <div className="space-y-2">
               <h2 className="text-lg font-bold mb-2 text-red-700">Failed ({failedTodos.length})</h2>
