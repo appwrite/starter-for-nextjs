@@ -41,6 +41,7 @@ export async function GET(request: NextRequest) {
                 redirectTo = stateData.redirectTo || '/dashboard';
             } catch (e) {
                 console.log('Invalid state data, using default redirect');
+                console.log(e)
             }
         }
 

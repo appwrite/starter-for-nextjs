@@ -69,7 +69,7 @@ export async function createSession(uclUser: UCLUser): Promise<string> {
 
 export async function verifySession(token: string): Promise<AuthUser | null> {
     try {
-        const { payload } = await jwtVerify(token, JWT_SECRET);
+        // const { payload } = await jwtVerify(token, JWT_SECRET);
 
         const session = await db.session.findUnique({
             where: { token },
