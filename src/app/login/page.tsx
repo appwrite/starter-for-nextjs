@@ -3,6 +3,8 @@
 import { useAuth } from '@/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import MenuBar from '@/components/MenuBar';
+import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
     const { user, login, loading } = useAuth();
@@ -26,25 +28,18 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Sign in to UCL App
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        Use your UCL credentials to access the application
-                    </p>
-                </div>
-
-                <div className="mt-8 space-y-6">
-                    <button
-                        onClick={login}
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                        Sign in with UCL
-                    </button>
-                </div>
+        <div className="min-h-screen bg-white border border-[#a78bfa]">
+            <MenuBar showSignIn={false} />
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)]">
+                <h1 className="text-5xl font-bold text-[#002855] mb-10 mt-10">Sign In</h1>
+                <Button
+                    onClick={login}
+                    size="lg"
+                    className="flex items-center gap-3 bg-[#002855] text-white text-xl font-semibold rounded-full px-8 py-4 shadow hover:bg-[#003366] transition"
+                >
+                    <span className="bg-white rounded-full w-8 h-8 flex items-center justify-center text-[#002855] font-bold text-lg">🏛️</span>
+                    Sign in with UCL
+                </Button>
             </div>
         </div>
     );
