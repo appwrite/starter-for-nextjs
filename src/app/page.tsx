@@ -50,13 +50,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ... Rest of the page remains the same ... */}
         
         {/* === "How It Works" Section === */}
         <section className="w-full bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-[#002248] mb-12">
-              How the Programming Tutor Scheme Works
+            <h2 className="text-4xl md:text-4xl font-light text-center text-[#002248] mb-12">
+              How the Programming Mentor Scheme Works
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card className="text-center shadow-sm">
@@ -87,7 +86,7 @@ export default function HomePage() {
         {/* === Testimonials Section === */}
         <section className="w-full bg-[#002248] border-y">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-[#002248] mb-12">What Students Say</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-[#ffffff] mb-12">What Students Say</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <Card className="shadow-sm">
                         <CardContent className="p-8">

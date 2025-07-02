@@ -26,9 +26,10 @@ export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInBu
         {/* === Left Side: Logo & Brand === */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="bg-white p-1 rounded-md">
-            <Image src="/uclcs-logo.jpeg" alt="UCL CS Logo" width={40} height={40} />
+            <Image src="/myPM-logo.png" alt="UCL CS Logo" width={40} height={40} />
           </div>
-          <span className="text-white text-2xl font-bold italic group-hover:underline">
+          <span className="text-white text-2xl font-bold group-hover:underline"
+                style={{ fontFamily: 'Literata, serif', fontWeight: 300 }}>
             myPM
           </span>
         </Link>
@@ -99,12 +100,11 @@ export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInBu
             </>
           ) : (
             !hideSignInButton && (
-              <Button
-                onClick={login}
-                className="bg-white text-[#002248] font-mono font-semibold rounded-md px-6 py-2 text-sm shadow hover:bg-gray-200 transition-colors"
-              >
-                Sign In
-              </Button>
+                <Link href={"/login"}>
+                <Button size="lg" className="bg-white text-[#002248] font-mono font-bold py-3 px-8 rounded-md hover:bg-gray-200 transition-colors text-lg">
+                  {"Sign In"}
+                </Button>
+              </Link>
             )
           )}
         </div>

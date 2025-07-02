@@ -34,14 +34,19 @@ export default function LoginPage() {
             <MenuBar hideSignInButton />
             <div className="flex-1 flex flex-col items-center justify-center">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center mt-8">
-                    <Image src="/uclcs-logo.jpeg" alt="UCL CS Logo" width={80} height={80} className="mb-6" />
+                <div className="flex items-center gap-4 mb-6">
+    <Image src="/uclcs-logo.jpeg" alt="UCL CS Logo" width={80} height={80} />
+    <Image src="/myPM-logo.png" alt="myPM Logo" width={80} height={80} />
+</div>
+
+                
                     <h1 className="text-2xl font-bold mb-8 text-center">Sign in to myPM</h1>
                     <Button
                         onClick={login}
                         className="w-full flex items-center justify-center gap-3 bg-[#002248] text-white font-mono font-semibold rounded-md px-6 py-3 text-base shadow hover:bg-[#003366] transition mb-4"
                         size="lg"
                     >
-                        <Image src="/portico-logo.png" alt="Portico Logo" width={24} height={24} />
+                        <Image src="/portico-logo.png" alt="Portico Logo" width={20} height={20} />
                         Sign in with UCL
                     </Button>
                     <Link href="/" className="mt-2 text-sm text-[#002248] hover:underline">Back to Home</Link>
