@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Menu, Home, Users, BookOpen, LayoutDashboard } from 'lucide-react';
 
-export const MenuBar: React.FC = () => {
+export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInButton }) => {
   const { user, login, logout } = useAuth();
 
   const navLinks = [
@@ -52,7 +52,7 @@ export const MenuBar: React.FC = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-white/10">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src={user.picture ?? undefined} alt={user.given_name} />
+                      <AvatarImage src={undefined} alt={user.given_name} />
                       <AvatarFallback>{user.given_name?.[0]?.toUpperCase()}</AvatarFallback>
                     </Avatar>
                   </Button>
@@ -98,12 +98,14 @@ export const MenuBar: React.FC = () => {
               </Sheet>
             </>
           ) : (
-            <Button
-              onClick={login}
-              className="bg-white text-[#002248] font-mono font-semibold rounded-md px-6 py-2 text-sm shadow hover:bg-gray-200 transition-colors"
-            >
-              Sign In
-            </Button>
+            !hideSignInButton && (
+              <Button
+                onClick={login}
+                className="bg-white text-[#002248] font-mono font-semibold rounded-md px-6 py-2 text-sm shadow hover:bg-gray-200 transition-colors"
+              >
+                Sign In
+              </Button>
+            )
           )}
         </div>
       </div>

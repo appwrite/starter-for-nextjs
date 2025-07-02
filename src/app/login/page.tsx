@@ -3,8 +3,10 @@
 import { useAuth } from '@/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import MenuBar from '@/components/MenuBar';
+import { MenuBar } from '@/components/MenuBar';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LoginPage() {
     const { user, login, loading } = useAuth();
@@ -18,7 +20,7 @@ export default function LoginPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-[#f7f8fa]">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading...</p>
@@ -28,18 +30,22 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-white border border-[#a78bfa]">
-            <MenuBar showSignIn={false} />
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)]">
-                <h1 className="text-5xl font-bold text-[#002855] mb-10 mt-10">Sign In</h1>
-                <Button
-                    onClick={login}
-                    size="lg"
-                    className="flex items-center gap-3 bg-[#002855] text-white text-xl font-semibold rounded-full px-8 py-4 shadow hover:bg-[#003366] transition"
-                >
-                    <span className="bg-white rounded-full w-8 h-8 flex items-center justify-center text-[#002855] font-bold text-lg">🏛️</span>
-                    Sign in with UCL
-                </Button>
+        <div className="min-h-screen bg-[#f7f8fa] flex flex-col">
+            <MenuBar hideSignInButton />
+            <div className="flex-1 flex flex-col items-center justify-center">
+                <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center mt-8">
+                    <Image src="/uclcs-logo.jpeg" alt="UCL CS Logo" width={80} height={80} className="mb-6" />
+                    <h1 className="text-2xl font-bold mb-8 text-center">Sign in to myPM</h1>
+                    <Button
+                        onClick={login}
+                        className="w-full flex items-center justify-center gap-3 bg-[#002248] text-white font-mono font-semibold rounded-md px-6 py-3 text-base shadow hover:bg-[#003366] transition mb-4"
+                        size="lg"
+                    >
+                        <Image src="/portico-logo.png" alt="Portico Logo" width={24} height={24} />
+                        Sign in with UCL
+                    </Button>
+                    <Link href="/" className="mt-2 text-sm text-[#002248] hover:underline">Back to Home</Link>
+                </div>
             </div>
         </div>
     );
