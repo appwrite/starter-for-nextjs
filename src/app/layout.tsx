@@ -5,8 +5,8 @@ import { AuthProvider } from '@/components/AuthProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-    title: 'UCL App',
-    description: 'UCL API Integration with NextJS',
+    title: 'UCL myPM',
+    description: 'UCL Computer Science Programming Mentorship Platform',
 };
 
 export default function RootLayout({
