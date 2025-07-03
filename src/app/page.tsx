@@ -40,11 +40,17 @@ export default function HomePage() {
             </div>
 
             {/* Logo: Hidden by default, appears as a flex item on large screens */}
-            <div className="hidden lg:flex justify-center">
-               <img 
+            <div className="hidden lg:flex justify-center items-center gap-6">
+              <img 
                 src="/uclcs-logo.jpeg" 
                 alt="UCL CS Logo" 
-                className="w-64 h-64 border-2 border-white flex-shrink-0" 
+                className="w-40 h-40 border-1 border-white flex-shrink-0 bg-white p-2 rounded-md" 
+              />
+              <span className="text-4xl font-bold text-white">×</span>
+              <img 
+                src="/myPM-logo.png" 
+                alt="myPM Logo" 
+                className="w-40 h-40 border-1 border-white flex-shrink-0 bg-white p-2 rounded-md" 
               />
             </div>
           </div>
@@ -86,7 +92,7 @@ export default function HomePage() {
         {/* === Testimonials Section === */}
         <section className="w-full bg-[#002248] border-y">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-[#ffffff] mb-12">What Students Say</h2>
+                <h2 className="text-3xl md:text-4xl font-light text-center text-[#ffffff] mb-12">What Students Say</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <Card className="shadow-sm">
                         <CardContent className="p-8">

@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/AuthProvider';
+import { OnboardingRedirector } from '@/components/OnboardingRedirector';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
         <AuthProvider>
+            <OnboardingRedirector />
             {children}
         </AuthProvider>
         </body>

@@ -23,6 +23,7 @@ model User {
 
   // Session management
   sessions    Session[]
+  onboarding  Onboarding?
 
   @@map("users")
 }
@@ -39,8 +40,27 @@ model Session {
   @@map("sessions")
 }
 
+model Onboarding {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  name          String
+  degreeProgramme String
+  gender        String
+  studiedCS     Boolean
+  yearsExperience Int
+  quizAnswers   Json
+  skillScore    Int
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("onboarding")
+}
+
 enum Role {
   STUDENT
-  STAFF
+  MENTOR
+  SENIOR_MENTOR
   ADMIN
+  SUPERADMIN
 }

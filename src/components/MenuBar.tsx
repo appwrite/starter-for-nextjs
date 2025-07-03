@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Menu, Home, Users, BookOpen, LayoutDashboard } from 'lucide-react';
 
-export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInButton }) => {
+export const MenuBar: React.FC<{ hideSignInButton?: boolean; hideNavLinks?: boolean; showLogoutOnly?: boolean }> = ({ hideSignInButton, hideNavLinks, showLogoutOnly }) => {
   const { user, login, logout } = useAuth();
 
   const navLinks = [
@@ -35,7 +35,7 @@ export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInBu
         </Link>
 
         {/* === Center: Desktop Navigation === */}
-        {user && (
+        {user && !hideNavLinks && !showLogoutOnly && (
           <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link key={link.label} href={link.href} className="text-sm font-medium text-gray-200 hover:text-white transition-colors">
@@ -66,37 +66,45 @@ export const MenuBar: React.FC<{ hideSignInButton?: boolean }> = ({ hideSignInBu
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild><Link href="/dashboard">Dashboard</Link></DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout} className="text-red-500 focus:text-red-600 focus:bg-red-50">Log Out</DropdownMenuItem>
+                  {showLogoutOnly ? (
+                    <DropdownMenuItem onClick={logout} className="text-red-500 focus:text-red-600 focus:bg-red-50">Log Out</DropdownMenuItem>
+                  ) : (
+                    <>
+                      <DropdownMenuItem asChild><Link href="/dashboard">Dashboard</Link></DropdownMenuItem>
+                      <DropdownMenuItem onClick={logout} className="text-red-500 focus:text-red-600 focus:bg-red-50">Log Out</DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
               {/* Mobile Menu Trigger */}
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="lg:hidden text-white hover:bg-white/10">
-                    <Menu className="h-6 w-6" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="bg-[#002248] text-white border-l-white/20 w-[280px]">
-                  <div className="flex flex-col h-full">
-                    <div className="p-6 border-b border-white/20">
-                      <h2 className="text-lg font-semibold">Menu</h2>
+              {!hideNavLinks && !showLogoutOnly && (
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon" className="lg:hidden text-white hover:bg-white/10">
+                      <Menu className="h-6 w-6" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="bg-[#002248] text-white border-l-white/20 w-[280px]">
+                    <div className="flex flex-col h-full">
+                      <div className="p-6 border-b border-white/20">
+                        <h2 className="text-lg font-semibold">Menu</h2>
+                      </div>
+                      <nav className="flex-1 flex flex-col gap-2 p-4">
+                        {navLinks.map((link) => (
+                          <SheetClose key={link.label} asChild>
+                            <Link href={link.href} className="flex items-center gap-4 px-3 py-3 rounded-md text-base font-medium hover:bg-white/10 transition-colors">
+                              <link.icon className="h-5 w-5" />
+                              {link.label}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </nav>
                     </div>
-                    <nav className="flex-1 flex flex-col gap-2 p-4">
-                      {navLinks.map((link) => (
-                        <SheetClose key={link.label} asChild>
-                          <Link href={link.href} className="flex items-center gap-4 px-3 py-3 rounded-md text-base font-medium hover:bg-white/10 transition-colors">
-                            <link.icon className="h-5 w-5" />
-                            {link.label}
-                          </Link>
-                        </SheetClose>
-                      ))}
-                    </nav>
-                  </div>
-                </SheetContent>
-              </Sheet>
+                  </SheetContent>
+                </Sheet>
+              )}
             </>
           ) : (
             !hideSignInButton && (

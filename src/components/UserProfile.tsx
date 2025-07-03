@@ -38,11 +38,12 @@ export function UserProfile() {
                         <label className="block text-sm font-medium text-gray-700">Role</label>
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                             user.role === 'STUDENT' ? 'bg-blue-100 text-blue-800' :
-                                user.role === 'STAFF' ? 'bg-green-100 text-green-800' :
-                                    'bg-purple-100 text-purple-800'
-                        }`}>
-                            {user.role}
-                        </span>
+                            user.role === 'MENTOR' ? 'bg-green-100 text-green-800' :
+                            user.role === 'SENIOR_MENTOR' ? 'bg-yellow-100 text-yellow-800' :
+                            user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' :
+                            user.role === 'SUPERADMIN' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                        }`}>{user.role}</span>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">UPI</label>
@@ -60,8 +61,17 @@ export function UserProfile() {
                             {user.is_student && (
                                 <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Student</span>
                             )}
-                            {user.is_staff && (
-                                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Staff</span>
+                            {user.role === 'MENTOR' && (
+                                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Mentor</span>
+                            )}
+                            {user.role === 'SENIOR_MENTOR' && (
+                                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">Senior Mentor</span>
+                            )}
+                            {user.role === 'ADMIN' && (
+                                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Admin</span>
+                            )}
+                            {user.role === 'SUPERADMIN' && (
+                                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">Superadmin</span>
                             )}
                         </div>
                     </div>

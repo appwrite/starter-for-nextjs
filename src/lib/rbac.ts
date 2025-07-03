@@ -26,11 +26,18 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.USER_UPDATE,
         PERMISSIONS.TIMETABLE_READ,
     ],
-    [UserRole.STAFF]: [
+    [UserRole.MENTOR]: [
         PERMISSIONS.USER_READ,
         PERMISSIONS.USER_UPDATE,
         PERMISSIONS.TIMETABLE_READ,
         PERMISSIONS.TIMETABLE_WRITE,
+    ],
+    [UserRole.SENIOR_MENTOR]: [
+        PERMISSIONS.USER_READ,
+        PERMISSIONS.USER_UPDATE,
+        PERMISSIONS.TIMETABLE_READ,
+        PERMISSIONS.TIMETABLE_WRITE,
+        // Add more senior mentor permissions here if needed
     ],
     [UserRole.ADMIN]: [
         PERMISSIONS.USER_READ,
@@ -40,6 +47,16 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.ADMIN_WRITE,
         PERMISSIONS.TIMETABLE_READ,
         PERMISSIONS.TIMETABLE_WRITE,
+    ],
+    [UserRole.SUPERADMIN]: [
+        PERMISSIONS.USER_READ,
+        PERMISSIONS.USER_UPDATE,
+        PERMISSIONS.USER_DELETE,
+        PERMISSIONS.ADMIN_READ,
+        PERMISSIONS.ADMIN_WRITE,
+        PERMISSIONS.TIMETABLE_READ,
+        PERMISSIONS.TIMETABLE_WRITE,
+        // Add more superadmin permissions here if needed
     ],
 };
 

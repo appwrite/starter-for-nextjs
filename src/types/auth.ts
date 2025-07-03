@@ -36,8 +36,10 @@ export interface AuthUser {
 
 export enum UserRole {
     STUDENT = 'STUDENT',
-    STAFF = 'STAFF',
-    ADMIN = 'ADMIN'
+    MENTOR = 'MENTOR',
+    SENIOR_MENTOR = 'SENIOR_MENTOR',
+    ADMIN = 'ADMIN',
+    SUPERADMIN = 'SUPERADMIN'
 }
 
 export interface UCLAuthResponse {

@@ -3,6 +3,7 @@ import { SignJWT } from 'jose';
 import { AuthUser, UCLUser, UserRole } from '@/types/auth';
 import { db } from './db';
 import { getUserPermissions } from './rbac';
+import { Role as PrismaRole } from '@prisma/client';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!);
 
@@ -25,7 +26,7 @@ export async function createSession(uclUser: UCLUser): Promise<string> {
                     studentId: uclUser.student_id,
                     staffId: uclUser.staff_id,
                     department: uclUser.department,
-                    role: role,
+                    role: role as PrismaRole,
                 }
             });
         }
@@ -96,7 +97,7 @@ export async function verifySession(token: string): Promise<AuthUser | null> {
             student_id: session.user.studentId || undefined,
             staff_id: session.user.staffId || undefined,
             is_student: userRole === UserRole.STUDENT,
-            is_staff: userRole === UserRole.STAFF || userRole === UserRole.ADMIN,
+            is_staff: userRole === UserRole.MENTOR || userRole === UserRole.SENIOR_MENTOR || userRole === UserRole.ADMIN || userRole === UserRole.SUPERADMIN,
             upi: session.user.upi,
             role: userRole,
             permissions: permissions.map(p => `${p.resource}:${p.action}`)
@@ -118,15 +119,22 @@ export async function deleteSession(token: string): Promise<void> {
     }
 }
 
-function determineUserRole(uclUser: UCLUser): 'STUDENT' | 'STAFF' | 'ADMIN' {
-    // Check for staff groups
-    const staffGroups = ['csc.sg.allstaff', 'allstaff'];
-    const hasStaffGroup = uclUser.ucl_groups?.some(group =>
-        staffGroups.some(staffGroup => group.toLowerCase().includes(staffGroup.toLowerCase()))
+function determineUserRole(uclUser: UCLUser): UserRole {
+    // TODO: Implement advanced logic for Senior Mentor, Admin, Superadmin
+    const mentorGroups = ['programmingtutors2425'];
+    const seniorMentorGroups = ['SPT2425'];
+
+
+    const isMentor = uclUser.ucl_groups?.some(group =>
+        mentorGroups.some(mentorGroup => group.toLowerCase().includes(mentorGroup.toLowerCase()))
     );
 
-    if (hasStaffGroup) return 'STAFF';
-    if (uclUser.is_student) return 'STUDENT';
+    const isSeniorMentor = uclUser.ucl_groups?.some(group =>
+        seniorMentorGroups.some(seniorMentorGroup => group.toLowerCase().includes(seniorMentorGroup.toLowerCase()))
+    );
 
-    return 'STUDENT'; // Default fallback
+    if (isSeniorMentor) return UserRole.SENIOR_MENTOR;
+    if (isMentor) return UserRole.MENTOR;
+    if (uclUser.is_student) return UserRole.STUDENT;
+    return UserRole.STUDENT; // Default fallback
 }
