@@ -6,12 +6,20 @@ import Image from 'next/image';
 import { MenuBar } from '@/components/MenuBar';
 import { User, BookOpen, Code, CheckCircle } from 'lucide-react';
 import clsx from 'clsx';
-import { useAuth } from '@/components/AuthProvider';
+import { useAuth, useRequireAuth } from '@/components/AuthProvider';
+import { PERMISSIONS } from '@/lib/rbac';
+import { useRouter } from 'next/navigation';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const steps = [
   {
     label: 'Personal Details',
     description: 'Tell us about yourself including your name, degree programme, and gender identity.',
+    icon: User,
+  },
+  {
+    label: 'Profile Picture (Optional)',
+    description: 'Add a profile picture now, or skip and change it later.',
     icon: User,
   },
   {
@@ -44,6 +52,11 @@ export default function OnboardingPage() {
     quizAnswers: {} as Record<string, string>,
   });
   const [isVisible, setIsVisible] = useState(true);
+  const router = useRouter();
+  const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
+
+  const [profilePicVersion, setProfilePicVersion] = useState(Date.now());
 
   // Pre-populate name and upi from user when available
   React.useEffect(() => {
@@ -56,6 +69,19 @@ export default function OnboardingPage() {
     }
   }, [user, loading]);
 
+  // Redirect to dashboard if already onboarded
+  React.useEffect(() => {
+    if (!loading && user) {
+      fetch('/api/onboarding/status')
+        .then(res => res.json())
+        .then(data => {
+          if (data.onboarded) {
+            router.replace('/dashboard');
+          }
+        });
+    }
+  }, [user, loading, router]);
+
   // Dummy quiz questions
   const quizQuestions = [
     { id: 'q1', question: 'What is the output of 2 + 2?', options: ['3', '4', '5'], answer: '4' },
@@ -64,8 +90,10 @@ export default function OnboardingPage() {
 
   // Font classes
   const literata = 'font-literata';
-  const inter = 'font-inter';
   const mono = 'font-geist-mono';
+
+  // Require authentication and user:update permission
+  useRequireAuth({ requiredPermission: PERMISSIONS.USER_UPDATE });
 
   // Stepper
   const Stepper = () => (
@@ -120,6 +148,14 @@ export default function OnboardingPage() {
       body: JSON.stringify(form),
     });
     
+    // Upload profile picture if present
+    if (profilePic) {
+      const formData = new FormData();
+      formData.append('profilePic', profilePic);
+      await fetch('/api/user', { method: 'POST', body: formData });
+      setProfilePicVersion(Date.now());
+    }
+    
     setTimeout(() => {
       setStep((s) => s + 1);
       setIsVisible(true);
@@ -132,7 +168,7 @@ export default function OnboardingPage() {
     content = (
       <>
         <div className={clsx(literata, 'text-2xl font-bold mb-2 text-gray-900')}>Personal Details</div>
-        <div className={clsx(mono, 'mb-6 text-gray-600')}>Let's get to know you! Please fill in your details below.</div>
+        <div className={clsx(mono, 'mb-6 text-gray-600')}>Let&apos;s get to know you! Please fill in your details below.</div>
         <label className={clsx('block font-bold mb-1', literata)}>Name</label>
         <input
           className={clsx('w-full border px-2 py-2 mb-4 rounded-lg bg-gray-100', mono)}
@@ -169,6 +205,59 @@ export default function OnboardingPage() {
   } else if (step === 1) {
     content = (
       <>
+        <div className={clsx(literata, 'text-2xl font-bold mb-2 text-gray-900')}>Add a Profile Picture (Optional)</div>
+        <div className={clsx(mono, 'mb-4 text-gray-600')}>You can upload a profile picture now, or skip and add/change it later from your profile page.</div>
+        <div className="flex flex-col items-center gap-4 mb-4">
+          <Avatar className="w-24 h-24 ring-2 ring-[#002248]">
+            <AvatarImage src={profilePicUrl ? profilePicUrl : (user ? `/api/user/profile-pic/${user.upi}?v=${profilePicVersion}` : undefined)} alt={form.name} />
+            <AvatarFallback className="bg-[#002248] text-white text-3xl font-bold">?</AvatarFallback>
+          </Avatar>
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            id="onboarding-profile-pic"
+            onChange={e => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setProfilePic(file);
+                setProfilePicUrl(URL.createObjectURL(file));
+                // Do NOT upload here anymore
+              }
+            }}
+          />
+          <Button
+            size="sm"
+            variant="outline"
+            className="font-geist-mono text-xs px-3 py-1"
+            onClick={() => document.getElementById('onboarding-profile-pic')?.click()}
+          >
+            {profilePic ? 'Change Picture' : 'Upload Picture'}
+          </Button>
+          {profilePic && (
+            <Button
+              size="sm"
+              variant="secondary"
+              className="font-geist-mono text-xs px-3 py-1"
+              onClick={() => {
+                setProfilePic(null);
+                setProfilePicUrl(null);
+                setProfilePicVersion(Date.now());
+              }}
+            >
+              Remove
+            </Button>
+          )}
+        </div>
+        <div className="flex justify-between w-full">
+          <Button variant="secondary" onClick={handleBack} className={clsx(mono, 'transition-all duration-200')}>Back</Button>
+          <Button onClick={() => animateToStep(step + 1)} className={clsx(mono, 'transition-all duration-200')}>Continue →</Button>
+        </div>
+      </>
+    );
+  } else if (step === 2) {
+    content = (
+      <>
         <div className={clsx(literata, 'text-2xl font-bold mb-2 text-gray-900')}>Experience</div>
         <div className={clsx(mono, 'mb-6 text-gray-600')}>Tell us about your background in computer science and programming.</div>
         <div className="mb-4">
@@ -195,7 +284,7 @@ export default function OnboardingPage() {
         </div>
       </>
     );
-  } else if (step === 2) {
+  } else if (step === 3) {
     content = (
       <>
         <div className={clsx(literata, 'text-2xl font-bold mb-2 text-gray-900')}>Coding Quiz</div>
@@ -215,7 +304,7 @@ export default function OnboardingPage() {
         </div>
       </>
     );
-  } else if (step === 3) {
+  } else if (step === 4) {
     content = (
       <div className="text-center">
         <div className="flex justify-center mb-4">

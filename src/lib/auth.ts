@@ -100,7 +100,7 @@ export async function verifySession(token: string): Promise<AuthUser | null> {
             is_staff: userRole === UserRole.MENTOR || userRole === UserRole.SENIOR_MENTOR || userRole === UserRole.ADMIN || userRole === UserRole.SUPERADMIN,
             upi: session.user.upi,
             role: userRole,
-            permissions: permissions.map(p => `${p.resource}:${p.action}`)
+            permissions: permissions.map(p => `${p.resource}:${p.action}`),
         };
     } catch (error) {
         console.error('Session verification failed:', error);
@@ -137,4 +137,10 @@ function determineUserRole(uclUser: UCLUser): UserRole {
     if (isMentor) return UserRole.MENTOR;
     if (uclUser.is_student) return UserRole.STUDENT;
     return UserRole.STUDENT; // Default fallback
+}
+
+// Utility to log denied access attempts
+export function logDeniedAccess({ user, route, reason }: { user: AuthUser | null, route: string, reason: string }) {
+    const userInfo = user ? `User ${user.email} (ID: ${user.id}, Role: ${user.role})` : 'Unauthenticated user';
+    console.warn(`[SECURITY] Access denied on route '${route}': ${reason}. ${userInfo}`);
 }

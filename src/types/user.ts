@@ -9,4 +9,5 @@ export interface DatabaseUser {
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
+    profilePic?: string;
 }

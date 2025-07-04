@@ -7,6 +7,17 @@ datasource db {
   url       = env("DATABASE_URL")
 }
 
+model Group {
+  id        Int      @id @default(autoincrement()) // Numeric group id (internal)
+  groupNumber Int   @unique // Displayed group number, assigned manually
+  mentor    User?    @relation("MentorGroup", fields: [mentorId], references: [id])
+  mentorId  String?  @unique
+  mentees   User[]   @relation("MenteeGroup")
+  info      String?  // Optional: group resources/info
+
+  @@map("groups")
+}
+
 model User {
   id          String   @id @default(cuid())
   email       String   @unique
@@ -20,10 +31,16 @@ model User {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  profilePic  String?  // URL or path to profile picture
 
   // Session management
   sessions    Session[]
   onboarding  Onboarding?
+
+  // Group relations
+  mentorGroup Group?   @relation("MentorGroup")
+  menteeOf    Group?   @relation("MenteeGroup", fields: [menteeGroupId], references: [id])
+  menteeGroupId Int?
 
   @@map("users")
 }

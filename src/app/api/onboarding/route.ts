@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifySession } from '@/lib/auth';
+import { hasPermission, PERMISSIONS } from '@/lib/rbac';
+import { logDeniedAccess } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   // Get session token from cookies
@@ -11,6 +13,11 @@ export async function POST(request: NextRequest) {
   const user = await verifySession(sessionToken);
   if (!user) {
     return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+  }
+  // Authorization: user:update
+  if (!hasPermission(user.role, PERMISSIONS.USER_UPDATE)) {
+    logDeniedAccess({ user, route: '/api/onboarding', reason: 'Missing user:update permission' });
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
   const userId = user.id;
 

@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthUser } from '@/types/auth';
+import { useRouter } from 'next/navigation';
+import { hasPermission } from '@/lib/rbac';
 
 interface AuthContextType {
     user: AuthUser | null;
@@ -61,4 +63,32 @@ export function useAuth() {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
+}
+
+// Custom hook to require authentication and (optionally) permissions/roles
+export function useRequireAuth({
+    requiredRole,
+    requiredPermission,
+    redirectTo = '/login',
+}: {
+    requiredRole?: string;
+    requiredPermission?: { resource: string; action: string };
+    redirectTo?: string;
+} = {}) {
+    const { user, loading } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading) {
+            if (!user) {
+                router.replace(redirectTo);
+            } else if (requiredRole && user.role !== requiredRole) {
+                router.replace(redirectTo);
+            } else if (requiredPermission && !hasPermission(user.role, requiredPermission)) {
+                router.replace(redirectTo);
+            }
+        }
+    }, [user, loading, requiredRole, requiredPermission, redirectTo, router]);
+
+    return { user, loading };
 }
