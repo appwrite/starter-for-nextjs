@@ -265,8 +265,8 @@ export default function Home() {
                 </thead>
                 <tbody>
                   {logs.length > 0 ? (
-                    logs.map((log) => (
-                      <tr>
+                    logs.map((log, index) => (
+                      <tr key={`log-${index}-${log.date.getTime()}`}>
                         <td className="py-2 pl-4 font-[Fira_Code]">
                           {log.date.toLocaleString("en-US", {
                             month: "short",
@@ -294,7 +294,7 @@ export default function Home() {
                       </tr>
                     ))
                   ) : (
-                    <tr>
+                    <tr key="no-logs">
                       <td className="py-2 pl-4 font-[Fira_Code]">
                         There are no logs to show
                       </td>
