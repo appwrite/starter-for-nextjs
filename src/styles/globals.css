@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --jam-primary: 247 79 168;
+  --jam-primary-dark: 184 36 130;
+  --jam-secondary: 34 197 94;
+  --jam-surface: 248 248 255;
+  --jam-text: 36 36 44;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-sm antialiased;
+}
+
+.gradient-orb {
+  background: radial-gradient(
+    circle at 20% 20%,
+    rgba(234, 76, 137, 0.55),
+    transparent 60%
+  );
+}
+
+.gradient-sheen {
+  background: linear-gradient(
+    135deg,
+    rgba(114, 85, 255, 0.15),
+    rgba(247, 79, 193, 0.15)
+  );
+}
+
+.backdrop-blur-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px);
+}
+
+.input-focus-ring:focus-visible {
+  @apply ring-2 ring-offset-2 ring-pink-500 outline-none;
+}
