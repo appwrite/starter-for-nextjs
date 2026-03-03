@@ -6,20 +6,41 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "git": "node bin/ai-git.js",
+    "vibe": "node bin/vibe",
+    "vibe:setup": "node src/scripts/setup-hooks.js",
+    "vibe:uninstall": "node src/scripts/setup-hooks.js uninstall",
+    "vibe:hooks": "node src/scripts/setup-hooks.js status",
+    "vibe:status": "node bin/vibe status",
+    "vibe:commit": "node bin/vibe commit",
+    "vibe:analyze": "node bin/vibe analyze",
+    "vibe:review": "node bin/vibe review",
+    "vibe:pr": "node bin/vibe pr"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@appwrite.io/pink-icons": "^1.0.0",
+    "@octokit/app": "^16.1.2",
+    "@octokit/webhooks": "^14.2.0",
     "@tailwindcss/postcss": "^4.1.11",
     "appwrite": "^18.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.576.0",
     "next": "^15.4.8",
+    "next-themes": "^0.4.6",
     "postcss": "^8.5.6",
+    "radix-ui": "^1.4.3",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
     "prettier": "3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14"
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "shadcn": "^3.8.5",
+    "tw-animate-css": "^1.4.0"
   }
 }

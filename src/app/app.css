@@ -1,20 +1,108 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-summary::-webkit-details-marker {
-  display: none
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Claude-inspired custom tokens ─── */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Claude brand orange */
+  --color-claude: #d97757;
+  --color-claude-hover: #c25e3a;
+  --color-claude-light: #eeddd6;
+  --color-claude-muted: #f5ede8;
 }
 
-.checker-background::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-image: linear-gradient(#e6e6e690 1px, transparent 1px),
-    linear-gradient(90deg, #e6e6e690 1px, transparent 1px);
-  background-size: 3.7em 3.7em;
-  mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 55%);
-  z-index: -1;
-  background-position-x: center;
+/* ─── Light mode: warm cream + Claude orange ─── */
+:root {
+  --radius: 0.625rem;
+
+  --background:        oklch(0.988 0.004 82);   /* warm cream #FAF9F6     */
+  --foreground:        oklch(0.145 0.010 60);   /* warm near-black        */
+  --card:              oklch(1 0 0);            /* pure white cards       */
+  --card-foreground:   oklch(0.145 0.010 60);
+  --popover:           oklch(1 0 0);
+  --popover-foreground:oklch(0.145 0.010 60);
+
+  --primary:           oklch(0.63 0.13 42);     /* Claude orange #D97757  */
+  --primary-foreground:oklch(1 0 0);            /* white on orange        */
+
+  --secondary:         oklch(0.96 0.006 75);    /* warm stone-100         */
+  --secondary-foreground: oklch(0.25 0.010 60);
+
+  --muted:             oklch(0.96 0.006 75);
+  --muted-foreground:  oklch(0.52 0.015 55);   /* stone-500              */
+
+  --accent:            oklch(0.96 0.006 75);
+  --accent-foreground: oklch(0.25 0.010 60);
+
+  --destructive:       oklch(0.577 0.245 27.325);
+  --border:            oklch(0.89 0.010 75);    /* warm stone-200         */
+  --input:             oklch(0.89 0.010 75);
+  --ring:              oklch(0.63 0.13 42);     /* matches primary        */
+}
+
+/* ─── Dark mode: warm charcoal + lighter Claude orange ─── */
+.dark {
+  --background:        oklch(0.130 0.008 55);   /* warm dark #1C1917      */
+  --foreground:        oklch(0.985 0.004 82);   /* warm cream text        */
+  --card:              oklch(0.175 0.008 55);   /* warm dark card         */
+  --card-foreground:   oklch(0.985 0.004 82);
+  --popover:           oklch(0.175 0.008 55);
+  --popover-foreground:oklch(0.985 0.004 82);
+
+  --primary:           oklch(0.72 0.13 42);     /* lighter orange         */
+  --primary-foreground:oklch(0.13 0.008 55);
+
+  --secondary:         oklch(0.22 0.008 55);
+  --secondary-foreground: oklch(0.985 0.004 82);
+
+  --muted:             oklch(0.22 0.008 55);
+  --muted-foreground:  oklch(0.64 0.010 65);   /* warm stone-400         */
+
+  --accent:            oklch(0.22 0.008 55);
+  --accent-foreground: oklch(0.985 0.004 82);
+
+  --destructive:       oklch(0.704 0.191 22.216);
+  --border:            oklch(0.27 0.008 55);    /* warm dark border       */
+  --input:             oklch(0.27 0.008 55);
+  --ring:              oklch(0.72 0.13 42);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: 'Lora', Georgia, serif;
+  }
 }

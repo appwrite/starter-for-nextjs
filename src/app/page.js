@@ -1,311 +1,259 @@
-"use client";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
+import Link from "next/link"
 
-import "./app.css";
-import "@appwrite.io/pink-icons";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { client } from "@/lib/appwrite";
-import { AppwriteException } from "appwrite";
-import NextjsLogo from "../static/nextjs-icon.svg";
-import AppwriteLogo from "../static/appwrite-icon.svg";
-import Image from "next/image";
-
-export default function Home() {
-  const [detailHeight, setDetailHeight] = useState(55);
-  const [logs, setLogs] = useState([]);
-  const [status, setStatus] = useState("idle");
-  const [showLogs, setShowLogs] = useState(false);
-
-  const detailsRef = useRef(null);
-
-  const updateHeight = useCallback(() => {
-    if (detailsRef.current) {
-      setDetailHeight(detailsRef.current.clientHeight);
-    }
-  }, [logs, showLogs]);
-
-  useEffect(() => {
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, [updateHeight]);
-
-  useEffect(() => {
-    if (!detailsRef.current) return;
-    detailsRef.current.addEventListener("toggle", updateHeight);
-
-    return () => {
-      if (!detailsRef.current) return;
-      detailsRef.current.removeEventListener("toggle", updateHeight);
-    };
-  }, []);
-
-  async function sendPing() {
-    if (status === "loading") return;
-    setStatus("loading");
-    try {
-      const result = await client.ping();
-      const log = {
-        date: new Date(),
-        method: "GET",
-        path: "/v1/ping",
-        status: 200,
-        response: JSON.stringify(result),
-      };
-      setLogs((prevLogs) => [log, ...prevLogs]);
-      setStatus("success");
-    } catch (err) {
-      const log = {
-        date: new Date(),
-        method: "GET",
-        path: "/v1/ping",
-        status: err instanceof AppwriteException ? err.code : 500,
-        response:
-          err instanceof AppwriteException
-            ? err.message
-            : "Something went wrong",
-      };
-      setLogs((prevLogs) => [log, ...prevLogs]);
-      setStatus("error");
-    }
-    setShowLogs(true);
-  }
-
+export default function LandingPage() {
   return (
-    <main
-      className="checker-background flex flex-col items-center p-5"
-      style={{ marginBottom: `${detailHeight}px` }}
-    >
-      <div className="mt-25 flex w-full max-w-[40em] items-center justify-center lg:mt-34">
-        <div className="rounded-[25%] border border-[#19191C0A] bg-[#F9F9FA] p-3 shadow-[0px_9.36px_9.36px_0px_hsla(0,0%,0%,0.04)]">
-          <div className="rounded-[25%] border border-[#FAFAFB] bg-white p-5 shadow-[0px_2px_12px_0px_hsla(0,0%,0%,0.03)] lg:p-9">
-            <Image
-              alt={"Next.js logo"}
-              src={NextjsLogo}
-              width={56}
-              height={56}
-            />
-          </div>
-        </div>
-        <div
-          className={`flex w-38 items-center transition-opacity duration-2500 ${status === "success" ? "opacity-100" : "opacity-0"}`}
-        >
-          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-l from-[#f02e65]"></div>
-          <div className="icon-check flex h-5 w-5 items-center justify-center rounded-full border border-[#FD366E52] bg-[#FD366E14] text-[#FD366E]"></div>
-          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-r from-[#f02e65]"></div>
-        </div>
-        <div className="rounded-[25%] border border-[#19191C0A] bg-[#F9F9FA] p-3 shadow-[0px_9.36px_9.36px_0px_hsla(0,0%,0%,0.04)]">
-          <div className="rounded-[25%] border border-[#FAFAFB] bg-white p-5 shadow-[0px_2px_12px_0px_hsla(0,0%,0%,0.03)] lg:p-9">
-            <Image
-              alt={"Appwrite logo"}
-              src={AppwriteLogo}
-              width={56}
-              height={56}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#1C1917] transition-colors duration-300">
 
-      <section className="mt-12 flex h-52 flex-col items-center">
-        {status === "loading" ? (
-          <div className="flex flex-row gap-4">
-            <div role="status">
-              <svg
-                aria-hidden="true"
-                className="h-5 w-5 animate-spin fill-[#FD366E] text-gray-200 dark:text-gray-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-              <span className="sr-only">Loading...</span>
+      {/* Navigation */}
+      <nav className="border-b border-[#E8E0D5] dark:border-[#2C2825] backdrop-blur-sm sticky top-0 z-50 bg-[#FAF9F6]/90 dark:bg-[#1C1917]/90">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center">
+              <Logo width={72} />
+            </Link>
+            <div className="hidden md:flex items-center gap-7">
+              <Link href="#features" className="text-sm text-stone-500 hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-[#FAF9F6] transition">
+                Features
+              </Link>
+              <Link href="#pricing" className="text-sm text-stone-500 hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-[#FAF9F6] transition">
+                Pricing
+              </Link>
+              <ThemeToggle />
+              <Link href="/install" className="text-sm text-stone-500 hover:text-[#1C1917] dark:text-stone-400 dark:hover:text-[#FAF9F6] transition">
+                GitHub App
+              </Link>
+              <Link href="/aigit">
+                <Button variant="outline" className="border-[#D97757] text-[#D97757] hover:bg-[#F5EDE8] dark:hover:bg-[#2C2825] text-sm">
+                  Dashboard
+                </Button>
+              </Link>
+              <Link href="/install">
+                <Button className="bg-[#D97757] hover:bg-[#C25E3A] text-white text-sm shadow-sm">
+                  Install Free →
+                </Button>
+              </Link>
             </div>
-            <span>Waiting for connection...</span>
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+            </div>
           </div>
-        ) : status === "success" ? (
-          <h1 className="font-[Poppins] text-2xl font-light text-[#2D2D31]">
-            Congratulations!
-          </h1>
-        ) : (
-          <h1 className="font-[Poppins] text-2xl font-light text-[#2D2D31]">
-            Check connection
-          </h1>
-        )}
+        </div>
+      </nav>
 
-        <p className="mt-2 mb-8">
-          {status === "success" ? (
-            <span>You connected your app successfully.</span>
-          ) : status === "error" || status === "idle" ? (
-            <span>Send a ping to verify the connection</span>
-          ) : null}
-        </p>
+      {/* Hero */}
+      <section className="container mx-auto px-6 py-24 md:py-36">
+        <div className="text-center space-y-8 max-w-4xl mx-auto">
 
-        <button
-          onClick={sendPing}
-          className={`cursor-pointer rounded-md bg-[#FD366E] px-2.5 py-1.5 ${status === "loading" ? "hidden" : "visible"}`}
-        >
-          <span className="text-white">Send a ping</span>
-        </button>
+          <Badge className="bg-[#EEDDD6] text-[#C25E3A] border-[#D9B5A4] dark:bg-[#2C1F18] dark:text-[#E8896A] dark:border-[#5C3A28] px-4 py-1.5 text-sm font-medium rounded-full">
+            ✦ AI-Powered Git Workflow
+          </Badge>
+
+          <h1 className="text-5xl md:text-7xl font-semibold text-[#1C1917] dark:text-[#FAF9F6] leading-[1.15] tracking-tight" style={{fontFamily: 'Lora, Georgia, serif'}}>
+            Code review that
+            <br />
+            <span className="italic text-[#D97757] dark:text-[#E8896A]">
+              understands your vibe
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-stone-500 dark:text-stone-400 max-w-2xl mx-auto leading-relaxed">
+            Claude AI analyzes your commits, reviews code in real-time, and tracks your flow state. Ship better code, faster.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Link href="/install">
+              <Button size="lg" className="bg-[#D97757] hover:bg-[#C25E3A] text-white px-8 py-6 text-base shadow-sm rounded-xl">
+                Install GitHub App →
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="border-[#E8E0D5] dark:border-[#2C2825] text-stone-600 dark:text-stone-300 hover:bg-[#F5EDE8] dark:hover:bg-[#252120] px-8 py-6 text-base rounded-xl">
+              ▶ Watch demo
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-stone-400 dark:text-stone-500 text-sm">
+            <div className="flex items-center gap-2"><span className="text-[#D97757]">✓</span> No credit card required</div>
+            <div className="flex items-center gap-2"><span className="text-[#D97757]">✓</span> 10 free AI operations</div>
+            <div className="flex items-center gap-2"><span className="text-[#D97757]">✓</span> Cancel anytime</div>
+          </div>
+        </div>
+
+        {/* Terminal Demo */}
+        <div className="mt-20 max-w-3xl mx-auto">
+          <Card className="border-[#E8E0D5] dark:border-[#2C2825] overflow-hidden shadow-lg dark:shadow-2xl bg-white dark:bg-[#252120]">
+            <div className="bg-[#F5F1EB] dark:bg-[#1C1917] p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-3 h-3 rounded-full bg-red-400/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+                <div className="w-3 h-3 rounded-full bg-green-400/80" />
+                <span className="ml-3 text-xs text-stone-400 font-mono">~ ivgit.com</span>
+              </div>
+              <div className="bg-[#1C1917] rounded-lg p-5 font-mono text-sm space-y-2">
+                <div className="text-[#E8896A]">$ npm run vibe -- review</div>
+                <div className="text-stone-500">Analyzing your code with Claude AI...</div>
+                <div className="text-emerald-400 mt-3">✓ Code quality: 8.5/10</div>
+                <div className="text-amber-400">⚠ 2 potential issues found</div>
+                <div className="text-sky-400">ℹ Flow state: Peak momentum detected</div>
+                <div className="text-[#E8896A]">✦ Vibe check: You're in the zone! 🔥</div>
+              </div>
+            </div>
+          </Card>
+        </div>
       </section>
 
-      <div className="grid grid-rows-3 gap-7 lg:grid-cols-3 lg:grid-rows-none">
-        <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
-          <h2 className="text-xl font-light text-[#2D2D31]">Edit your app</h2>
-          <p>
-            Edit{" "}
-            <code className="rounded-sm bg-[#EDEDF0] p-1">app/page.js</code> to
-            get started with building your app.
+      {/* Features */}
+      <section id="features" className="container mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <p className="text-[#D97757] dark:text-[#E8896A] text-sm font-medium uppercase tracking-widest mb-3">Features</p>
+          <h2 className="text-4xl md:text-5xl font-semibold text-[#1C1917] dark:text-[#FAF9F6] mb-4" style={{fontFamily: 'Lora, Georgia, serif'}}>
+            Everything you need
+          </h2>
+          <p className="text-stone-500 dark:text-stone-400 max-w-xl mx-auto">
+            AI-powered tools that integrate seamlessly into your workflow
           </p>
         </div>
-        <a
-          href="https://cloud.appwrite.io"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
-            <div className="flex flex-row items-center justify-between">
-              <h2 className="text-xl font-light text-[#2D2D31]">
-                Go to console
-              </h2>
-              <span className="icon-arrow-right text-[#D8D8DB]"></span>
-            </div>
-            <p>
-              Navigate to the console to control and oversee the Appwrite
-              services.
-            </p>
-          </div>
-        </a>
 
-        <a
-          href="https://appwrite.io/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="flex h-full w-72 flex-col gap-2 rounded-md border border-[#EDEDF0] bg-white p-4">
-            <div className="flex flex-row items-center justify-between">
-              <h2 className="text-xl font-light text-[#2D2D31]">
-                Explore docs
-              </h2>
-              <span className="icon-arrow-right text-[#D8D8DB]"></span>
-            </div>
-            <p>
-              Discover the full power of Appwrite by diving into our
-              documentation.
-            </p>
-          </div>
-        </a>
-      </div>
-
-      <aside className="fixed bottom-0 flex w-full cursor-pointer border-t border-[#EDEDF0] bg-white">
-        <details open={showLogs} ref={detailsRef} className={"w-full"}>
-          <summary className="flex w-full flex-row justify-between p-4 marker:content-none">
-            <div className="flex gap-2">
-              <span className="font-semibold">Logs</span>
-              {logs.length > 0 && (
-                <div className="flex items-center rounded-md bg-[#E6E6E6] px-2">
-                  <span className="font-semibold">{logs.length}</span>
-                </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[
+            { icon: "🤖", title: "AI Commit Messages", desc: "Claude writes perfect conventional commits with 3 alternatives to choose from.", code: "feat(auth): implement OAuth 2.0" },
+            { icon: "🔍", title: "Live Code Review", desc: "Real-time review with severity scoring and actionable suggestions." },
+            { icon: "✦", title: "Vibe Analysis", desc: "Flow state tracking from your commit patterns. Know when you're in the zone." },
+            { icon: "📝", title: "PR Descriptions", desc: "Auto-generate comprehensive titles, descriptions, and suggested labels." },
+            { icon: "⚡", title: "Git Hooks", desc: "Pre-commit reviews, auto-filled messages, and post-commit insights." },
+            { icon: "🛠️", title: "CLI + Web UI", desc: "Terminal commands or browser dashboard. Your choice." },
+          ].map((f) => (
+            <Card key={f.title} className="bg-white dark:bg-[#252120] border-[#E8E0D5] dark:border-[#2C2825] hover:border-[#D97757] dark:hover:border-[#D97757] transition-all shadow-sm hover:shadow-md group">
+              <CardHeader>
+                <div className="text-3xl mb-3">{f.icon}</div>
+                <CardTitle className="text-[#1C1917] dark:text-[#FAF9F6] text-base font-semibold" style={{fontFamily: 'Lora, Georgia, serif'}}>{f.title}</CardTitle>
+                <CardDescription className="text-stone-500 dark:text-stone-400 text-sm leading-relaxed">{f.desc}</CardDescription>
+              </CardHeader>
+              {f.code && (
+                <CardContent>
+                  <div className="bg-[#F5F1EB] dark:bg-[#1C1917] rounded-lg p-3 font-mono text-xs text-[#C25E3A] dark:text-[#E8896A]">
+                    {f.code}
+                  </div>
+                </CardContent>
               )}
-            </div>
-            <div className="icon">
-              <span className="icon-cheveron-down" aria-hidden="true"></span>
-            </div>
-          </summary>
-          <div className="flex w-full flex-col lg:flex-row">
-            <div className="flex flex-col border-r border-[#EDEDF0]">
-              <div className="border-y border-[#EDEDF0] bg-[#FAFAFB] px-4 py-2 text-[#97979B]">
-                Project
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="container mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <p className="text-[#D97757] dark:text-[#E8896A] text-sm font-medium uppercase tracking-widest mb-3">Pricing</p>
+          <h2 className="text-4xl md:text-5xl font-semibold text-[#1C1917] dark:text-[#FAF9F6] mb-4" style={{fontFamily: 'Lora, Georgia, serif'}}>
+            Simple, transparent pricing
+          </h2>
+          <p className="text-stone-500 dark:text-stone-400">Start free, upgrade when ready</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto items-start">
+          {/* Free */}
+          <Card className="bg-white dark:bg-[#252120] border-[#E8E0D5] dark:border-[#2C2825] p-6 shadow-sm">
+            <CardHeader className="p-0 pb-6">
+              <div className="text-stone-400 text-sm mb-2">For trying out</div>
+              <CardTitle className="text-3xl text-[#1C1917] dark:text-[#FAF9F6]" style={{fontFamily: 'Lora, Georgia, serif'}}>Free</CardTitle>
+              <div className="text-5xl font-semibold text-[#1C1917] dark:text-[#FAF9F6] mt-3" style={{fontFamily: 'Lora, Georgia, serif'}}>
+                $0<span className="text-base text-stone-400 font-normal">/mo</span>
               </div>
-              <div className="grid grid-cols-2 gap-4 p-4">
-                <div className="flex flex-col">
-                  <span className="text-[#97979B]">Endpoint</span>
-                  <span className="truncate">
-                    {process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[#97979B]">Project-ID</span>
-                  <span className="truncate">
-                    {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[#97979B]">Project name</span>
-                  <span className="truncate">
-                    {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_NAME}
-                  </span>
-                </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ul className="space-y-3 mb-6 text-stone-500 dark:text-stone-400 text-sm">
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> 10 AI operations/month</li>
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Commit messages</li>
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Basic vibe tracking</li>
+                <li className="flex gap-2 text-stone-300 dark:text-stone-600"><span>✗</span> Code review</li>
+              </ul>
+              <Link href="/aigit" className="block">
+                <Button variant="outline" className="w-full border-[#E8E0D5] dark:border-[#2C2825]">Get started</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Pro */}
+          <Card className="bg-[#1C1917] dark:bg-[#D97757]/10 border-[#D97757] p-6 relative shadow-xl -mt-2">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+              <Badge className="bg-[#D97757] text-white border-0 px-3 py-1">Most popular</Badge>
+            </div>
+            <CardHeader className="p-0 pb-6">
+              <div className="text-[#E8896A] text-sm mb-2">For developers</div>
+              <CardTitle className="text-3xl text-[#FAF9F6]" style={{fontFamily: 'Lora, Georgia, serif'}}>Pro</CardTitle>
+              <div className="text-5xl font-semibold text-[#FAF9F6] mt-3" style={{fontFamily: 'Lora, Georgia, serif'}}>
+                $15<span className="text-base text-stone-400 font-normal">/mo</span>
               </div>
-            </div>
-            <div className="flex-grow">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-y border-[#EDEDF0] bg-[#FAFAFB] text-[#97979B]">
-                    {logs.length > 0 ? (
-                      <>
-                        <td className="w-52 py-2 pl-4">Date</td>
-                        <td>Status</td>
-                        <td>Method</td>
-                        <td className="hidden lg:table-cell">Path</td>
-                        <td className="hidden lg:table-cell">Response</td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="py-2 pl-4">Logs</td>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.length > 0 ? (
-                    logs.map((log, index) => (
-                      <tr key={`log-${index}-${log.date.getTime()}`}>
-                        <td className="py-2 pl-4 font-[Fira_Code]">
-                          {log.date.toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </td>
-                        <td>
-                          {log.status > 400 ? (
-                            <div className="w-fit rounded-sm bg-[#FF453A3D] px-1 text-[#B31212]">
-                              {log.status}
-                            </div>
-                          ) : (
-                            <div className="w-fit rounded-sm bg-[#10B9813D] px-1 text-[#0A714F]">
-                              {log.status}
-                            </div>
-                          )}
-                        </td>
-                        <td>{log.method}</td>
-                        <td className="hidden lg:table-cell">{log.path}</td>
-                        <td className="hidden font-[Fira_Code] lg:table-cell">
-                          {log.response}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr key="no-logs">
-                      <td className="py-2 pl-4 font-[Fira_Code]">
-                        There are no logs to show
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ul className="space-y-3 mb-6 text-stone-300 text-sm">
+                <li className="flex gap-2"><span className="text-[#E8896A]">✓</span> Unlimited operations</li>
+                <li className="flex gap-2"><span className="text-[#E8896A]">✓</span> Code review + scoring</li>
+                <li className="flex gap-2"><span className="text-[#E8896A]">✓</span> PR descriptions</li>
+                <li className="flex gap-2"><span className="text-[#E8896A]">✓</span> Full vibe analysis</li>
+                <li className="flex gap-2"><span className="text-[#E8896A]">✓</span> Git hooks</li>
+              </ul>
+              <Link href="/aigit" className="block">
+                <Button className="w-full bg-[#D97757] hover:bg-[#C25E3A] text-white">Start free trial</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Team */}
+          <Card className="bg-white dark:bg-[#252120] border-[#E8E0D5] dark:border-[#2C2825] p-6 shadow-sm">
+            <CardHeader className="p-0 pb-6">
+              <div className="text-stone-400 text-sm mb-2">For teams</div>
+              <CardTitle className="text-3xl text-[#1C1917] dark:text-[#FAF9F6]" style={{fontFamily: 'Lora, Georgia, serif'}}>Team</CardTitle>
+              <div className="text-5xl font-semibold text-[#1C1917] dark:text-[#FAF9F6] mt-3" style={{fontFamily: 'Lora, Georgia, serif'}}>
+                $50<span className="text-base text-stone-400 font-normal">/mo</span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ul className="space-y-3 mb-6 text-stone-500 dark:text-stone-400 text-sm">
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Everything in Pro</li>
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Up to 5 developers</li>
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Team analytics</li>
+                <li className="flex gap-2"><span className="text-[#D97757]">✓</span> Priority support</li>
+              </ul>
+              <Button variant="outline" className="w-full border-[#E8E0D5] dark:border-[#2C2825]">Contact sales</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container mx-auto px-6 py-24">
+        <div className="max-w-3xl mx-auto bg-[#1C1917] dark:bg-[#252120] rounded-2xl p-14 text-center border border-[#2C2825]">
+          <h2 className="text-4xl md:text-5xl font-semibold text-[#FAF9F6] mb-5 leading-tight" style={{fontFamily: 'Lora, Georgia, serif'}}>
+            Ready to ship
+            <span className="italic text-[#E8896A]"> better code?</span>
+          </h2>
+          <p className="text-stone-400 mb-8 max-w-xl mx-auto">
+            Join developers already using AI to write cleaner commits and catch bugs earlier.
+          </p>
+          <Link href="/aigit">
+            <Button size="lg" className="bg-[#D97757] hover:bg-[#C25E3A] text-white px-10 py-6 text-base rounded-xl shadow-sm">
+              Start your free trial →
+            </Button>
+          </Link>
+          <p className="text-stone-500 text-sm mt-4">No credit card required</p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#E8E0D5] dark:border-[#2C2825]">
+        <div className="container mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <Logo width={56} />
+            <p className="text-stone-400 text-sm">© 2026 ivGit · ivgit.com · Built with Claude AI</p>
           </div>
-        </details>
-      </aside>
-    </main>
-  );
+        </div>
+      </footer>
+    </div>
+  )
 }
