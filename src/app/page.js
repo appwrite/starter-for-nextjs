@@ -134,11 +134,11 @@ export default function Home() {
             <span>Waiting for connection...</span>
           </div>
         ) : status === "success" ? (
-          <h1 className="font-[Poppins] text-2xl font-light text-[#2D2D31]">
+          <h1 className="font-poppins text-2xl font-light text-[#2D2D31]">
             Congratulations!
           </h1>
         ) : (
-          <h1 className="font-[Poppins] text-2xl font-light text-[#2D2D31]">
+          <h1 className="font-poppins text-2xl font-light text-[#2D2D31]">
             Check connection
           </h1>
         )}
@@ -271,7 +271,7 @@ export default function Home() {
                   {logs.length > 0 ? (
                     logs.map((log, index) => (
                       <tr key={`log-${index}-${log.date.getTime()}`}>
-                        <td className="py-2 pl-4 font-[Fira_Code]">
+                        <td className="font-fira-code py-2 pl-4">
                           {log.date.toLocaleString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -292,14 +292,14 @@ export default function Home() {
                         </td>
                         <td>{log.method}</td>
                         <td className="hidden lg:table-cell">{log.path}</td>
-                        <td className="hidden font-[Fira_Code] lg:table-cell">
+                        <td className="font-fira-code hidden lg:table-cell">
                           {log.response}
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr key="no-logs">
-                      <td className="py-2 pl-4 font-[Fira_Code]">
+                      <td className="font-fira-code py-2 pl-4">
                         There are no logs to show
                       </td>
                     </tr>

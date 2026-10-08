@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-inter: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+  --font-fira-code: var(--font-fira-code);
+}
+
 summary::-webkit-details-marker {
   display: none;
 }
