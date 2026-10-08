@@ -1,6 +1,6 @@
 "use client";
 
-import "./app.css";
+import "./globals.css";
 import "@appwrite.io/pink-icons";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { client } from "@/lib/appwrite";
@@ -21,7 +21,7 @@ export default function Home() {
     if (detailsRef.current) {
       setDetailHeight(detailsRef.current.clientHeight);
     }
-  }, [logs, showLogs]);
+  }, []);
 
   useEffect(() => {
     updateHeight();
@@ -30,14 +30,18 @@ export default function Home() {
   }, [updateHeight]);
 
   useEffect(() => {
-    if (!detailsRef.current) return;
-    detailsRef.current.addEventListener("toggle", updateHeight);
+    updateHeight();
+  }, [logs, showLogs, updateHeight]);
+
+  useEffect(() => {
+    const detailsElement = detailsRef.current;
+    if (!detailsElement) return;
+    detailsElement.addEventListener("toggle", updateHeight);
 
     return () => {
-      if (!detailsRef.current) return;
-      detailsRef.current.removeEventListener("toggle", updateHeight);
+      detailsElement.removeEventListener("toggle", updateHeight);
     };
-  }, []);
+  }, [updateHeight]);
 
   async function sendPing() {
     if (status === "loading") return;
@@ -89,9 +93,9 @@ export default function Home() {
         <div
           className={`flex w-38 items-center transition-opacity duration-2500 ${status === "success" ? "opacity-100" : "opacity-0"}`}
         >
-          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-l from-[#f02e65]"></div>
+          <div className="to-[rgba(253, 54, 110, 0.15)] h-px flex-1 bg-linear-to-l from-[#f02e65]"></div>
           <div className="icon-check flex h-5 w-5 items-center justify-center rounded-full border border-[#FD366E52] bg-[#FD366E14] text-[#FD366E]"></div>
-          <div className="to-[rgba(253, 54, 110, 0.15)] h-[1px] flex-1 bg-gradient-to-r from-[#f02e65]"></div>
+          <div className="to-[rgba(253, 54, 110, 0.15)] h-px flex-1 bg-linear-to-r from-[#f02e65]"></div>
         </div>
         <div className="rounded-[25%] border border-[#19191C0A] bg-[#F9F9FA] p-3 shadow-[0px_9.36px_9.36px_0px_hsla(0,0%,0%,0.04)]">
           <div className="rounded-[25%] border border-[#FAFAFB] bg-white p-5 shadow-[0px_2px_12px_0px_hsla(0,0%,0%,0.03)] lg:p-9">
@@ -244,7 +248,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-grow">
+            <div className="grow">
               <table className="w-full">
                 <thead>
                   <tr className="border-y border-[#EDEDF0] bg-[#FAFAFB] text-[#97979B]">
