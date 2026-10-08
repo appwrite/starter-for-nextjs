@@ -4,13 +4,16 @@ Kickstart your Next.js development with this ready-to-use starter project integr
 
 ## 🚀Getting started
 
-###
-Clone the Project
+### Clone the Project
+
 Clone this repository to your local machine using Git:
 
-`git clone https://github.com/appwrite/starter-for-nextjs`
+```
+git clone https://github.com/appwrite/starter-for-nextjs
+```
 
 ## 🛠️ Development guid
+
 1. **Configure Appwrite**<br/>
    Navigate to `.env` and update the values to match your Appwrite project credentials.
 2. **Customize as needed**<br/>
@@ -22,5 +25,6 @@ Clone this repository to your local machine using Git:
    Start the project by running `npm run dev`.
 
 ## 💡 Additional notes
+
 - This starter project is designed to streamline your Next.js development with Appwrite.
 - Refer to the [Appwrite documentation](https://appwrite.io/docs) for detailed integration guidance.

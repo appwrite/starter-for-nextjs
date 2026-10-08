@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-inter: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+  --font-fira-code: var(--font-fira-code);
+}
+
 summary::-webkit-details-marker {
-  display: none
+  display: none;
 }
 
 .checker-background::before {
@@ -11,7 +17,8 @@ summary::-webkit-details-marker {
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: linear-gradient(#e6e6e690 1px, transparent 1px),
+  background-image:
+    linear-gradient(#e6e6e690 1px, transparent 1px),
     linear-gradient(90deg, #e6e6e690 1px, transparent 1px);
   background-size: 3.7em 3.7em;
   mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 55%);
